@@ -6,11 +6,11 @@ describe('Paths', () => {
 	it('exports an object', () => {
 		assert.strictEqual(typeof deps, 'object');
 	});
-	
+
 	it('exports "bin" string', () => {
 		assert.strictEqual(typeof deps.bin, 'string');
 	});
-	
+
 	it('exports "include" string', () => {
 		assert.strictEqual(typeof deps.include, 'string');
 	});
