@@ -55,10 +55,11 @@
 		"url": "https://github.com/node-3d/deps-opengl.git"
 	},
 	"dependencies": {
-		"@node-3d/addon-tools": "^11.0.0"
+		"@node-3d/addon-tools": "^10.0.0"
 	},
 	"devDependencies": {
-		"oxlint": "^1.65.0"
+		"oxlint": "1.72.0",
+		"oxfmt": "0.57.0"
 	},
 	"type": "module",
 	"types": "index.d.ts",
