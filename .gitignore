@@ -9,3 +9,4 @@ src/glew*/
 src/glfw*/
 bin-*/
 *.log
+*.tgz

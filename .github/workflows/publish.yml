@@ -23,6 +23,7 @@ jobs:
           node-version: 24.13.0
           cache: 'npm'
 
+
       - name: Get Package Version
         id: package-version
         run: node -p "'version='+require('./package').version" >> $GITHUB_OUTPUT
