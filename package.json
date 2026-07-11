@@ -54,7 +54,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/node-3d/deps-opengl.git"
+		"url": "git+https://github.com/node-3d/deps-opengl.git"
 	},
 	"dependencies": {
 		"@node-3d/addon-tools": "^10.0.0"
