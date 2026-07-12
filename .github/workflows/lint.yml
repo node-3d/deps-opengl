@@ -33,7 +33,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Run Format Check
-        run: npm run format:ci
+        run: npm run format:ts:ci
 
       - name: Run Lint
         run: npm run lint:all
