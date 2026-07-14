@@ -44,9 +44,7 @@
 		"test:ci": "node --test \"test/**/*.test.js\"",
 		"lint": "npm run lint:all",
 		"lint:oxlint": "oxlint .",
-		"lint:all": "npm run lint:oxlint",
-		"format:ts": "oxfmt -c ./oxfmt.config.ts --no-error-on-unmatched-pattern \"**/*.{js,jsx,ts,tsx}\"",
-		"format:ts:ci": "oxfmt -c ./oxfmt.config.ts --check --no-error-on-unmatched-pattern \"**/*.{js,jsx,ts,tsx}\""
+		"lint:all": "npm run lint:oxlint"
 	},
 	"engines": {
 		"node": ">=24.13.0",
