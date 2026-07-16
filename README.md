@@ -2,7 +2,7 @@
 
 This is a part of [Node3D](https://github.com/node-3d) project.
 
-[![NPM](https://badge.fury.io/js/%40node-3d%2Fdeps-opengl.svg)](https://badge.fury.io/js/@node-3d/deps-opengl)
+[![NPM](https://badge.fury.io/js/@node-3d%2Fdeps-opengl.svg)](https://badge.fury.io/js/@node-3d/deps-opengl)
 [![Lint](https://github.com/node-3d/deps-opengl/actions/workflows/lint.yml/badge.svg)](https://github.com/node-3d/deps-opengl/actions/workflows/lint.yml)
 [![Test](https://github.com/node-3d/deps-opengl/actions/workflows/test.yml/badge.svg)](https://github.com/node-3d/deps-opengl/actions/workflows/test.yml)
 
