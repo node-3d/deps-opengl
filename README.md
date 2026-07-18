@@ -1,4 +1,4 @@
-# OpenGL binaries
+# OpenGL dependencies
 
 This is a part of [Node3D](https://github.com/node-3d) project.
 
@@ -26,11 +26,10 @@ The attestation links the archive to the repository, workflow, commit, and
 release build identity. It does not replace review of the source code, workflow,
 or third-party library contents.
 
-This dependency package distributes **OpenGL**, **GLFW3** and **GLEW**
-binaries through **npm** for **Node.js** addons.
+This dependency package distributes **OpenGL** headers plus **GLFW3** and
+**GLEW** binaries and headers through **npm** for **Node.js** addons.
 
-* Platforms: Windows x64, Windows ARM64, Linux x64, Linux ARM64, macOS x64,
-  macOS ARM64.
+* Platforms: Windows x64/ARM64, Linux x64/ARM64, macOS x64/ARM64.
 * Libraries: GLEW 2.2, GLFW 3.4, OpenGL.
 
 

@@ -3,8 +3,11 @@ setlocal
 
 if "%BUILD_PLATFORM%"=="" set BUILD_PLATFORM=x64
 set BUILD_DIR=src\glew-build-%BUILD_PLATFORM%
+set EXTRA_CMAKE_FLAGS=
 
-cmake -S src\glew\build\cmake -B %BUILD_DIR% -A %BUILD_PLATFORM% -DBUILD_UTILS=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5 || exit /b 1
+if /I "%BUILD_PLATFORM%"=="ARM64" set EXTRA_CMAKE_FLAGS=-DCMAKE_SHARED_LINKER_FLAGS=ucrt.lib
+
+cmake -S src\glew\build\cmake -B %BUILD_DIR% -A %BUILD_PLATFORM% -DBUILD_UTILS=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5 %EXTRA_CMAKE_FLAGS% || exit /b 1
 cmake --build %BUILD_DIR% --config Release --target glew || exit /b 1
 
 copy /y %BUILD_DIR%\bin\Release\glew32.dll src\build\glew32.dll || exit /b 1
