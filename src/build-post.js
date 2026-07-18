@@ -42,9 +42,7 @@ const findLinuxLib = async (name) => {
 try {
 	await ensuredir(binPath);
 	
-	if (platform === 'windows') {
-		await copy(path.resolve('src/OpenGL32.Lib'), `${binPath}/OpenGL32.Lib`);
-	} else if (['linux', 'aarch64'].includes(platform)) {
+	if (['linux', 'aarch64'].includes(platform)) {
 		await findLinuxLib('libGL.so');
 		await findLinuxLib('libXrandr.so');
 		await findLinuxLib('libXrender.so');

@@ -13,10 +13,29 @@ on:
 
 jobs:
   unit-tests:
-    name: Unit Tests
+    name: Unit Tests (${{ matrix.target }})
     strategy:
+        fail-fast: false
         matrix:
-          os: [ubuntu-22.04, ubuntu-22.04-arm, windows-2022, macos-26]
+          include:
+            - target: windows-x64
+              os: windows-2022
+              node_arch: x64
+            - target: windows-arm64
+              os: windows-11-arm
+              node_arch: arm64
+            - target: linux-x64
+              os: ubuntu-22.04
+              node_arch: x64
+            - target: linux-arm64
+              os: ubuntu-22.04-arm
+              node_arch: arm64
+            - target: darwin-x64
+              os: macos-26
+              node_arch: x64
+            - target: darwin-arm64
+              os: macos-26
+              node_arch: arm64
 
     runs-on: ${{ matrix.os }}
 
@@ -31,7 +50,11 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.13.0
+          architecture: ${{ matrix.node_arch }}
           cache: 'npm'
+
+      - name: Print Native Target
+        run: node -p "`${process.platform}-${process.arch}`"
 
       - name: Install Modules
         run: npm ci --ignore-scripts

@@ -6,6 +6,11 @@ defaults:
 on:
   workflow_dispatch
 
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
 jobs:
   create_release:
     name: Create Release
@@ -41,10 +46,35 @@ jobs:
           name: Release ${{ steps.package-version.outputs.version }}
 
   build:
-    name: Build
+    name: Build (${{ matrix.target }})
+    needs: create_release
     strategy:
+        fail-fast: false
         matrix:
-          os: [ubuntu-22.04, ubuntu-22.04-arm, windows-2022, macos-26]
+          include:
+            - target: windows-x64
+              os: windows-2022
+              node_arch: x64
+              msbuild_arch: x64
+              build_platform: x64
+            - target: windows-arm64
+              os: windows-11-vs2026-arm
+              node_arch: arm64
+              msbuild_arch: arm64
+              build_platform: ARM64
+              vs_prerelease: true
+            - target: linux-x64
+              os: ubuntu-22.04
+              node_arch: x64
+            - target: linux-arm64
+              os: ubuntu-22.04-arm
+              node_arch: arm64
+            - target: darwin-x64
+              os: macos-26
+              node_arch: x64
+            - target: darwin-arm64
+              os: macos-26
+              node_arch: arm64
 
     runs-on: ${{ matrix.os }}
 
@@ -59,33 +89,42 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 24.13.0
+          architecture: ${{ matrix.node_arch }}
           cache: 'npm'
+
+      - name: Print Native Target
+        run: node -p "`${process.platform}-${process.arch}`"
 
       - name: Install Modules
         run: npm ci --ignore-scripts
 
       - name: Add msbuild to PATH
-        if: matrix.os == 'windows-2022'
+        if: startsWith(matrix.target, 'windows-')
         uses: microsoft/setup-msbuild@v3
         with:
-          msbuild-architecture: x64
+          msbuild-architecture: ${{ matrix.msbuild_arch }}
+          vs-prerelease: ${{ matrix.vs_prerelease || false }}
 
       - name: Build Pre Step
         run: chmod +x src/extract.sh && src/extract.sh
 
       - name: Build Unix
-        if: matrix.os != 'windows-2022'
+        if: ${{ !startsWith(matrix.target, 'windows-') }}
         run: node src/build-unix
 
       - name: Build Windows GLEW
-        if: matrix.os == 'windows-2022'
+        if: startsWith(matrix.target, 'windows-')
         shell: cmd
         run: src/windows-glew.cmd
+        env:
+          BUILD_PLATFORM: ${{ matrix.build_platform }}
 
       - name: Build Windows GLFW
-        if: matrix.os == 'windows-2022'
+        if: startsWith(matrix.target, 'windows-')
         shell: cmd
         run: src/windows-glfw.cmd
+        env:
+          BUILD_PLATFORM: ${{ matrix.build_platform }}
 
       - name: Build Post Step
         run: node src/build-post
@@ -98,6 +137,11 @@ jobs:
       - name: Pack Files
         id: pack-files
         run: node -e "import('@node-3d/addon-tools').then((m) => m.actionPack())" >> $GITHUB_OUTPUT
+
+      - name: Attest Binary
+        uses: actions/attest@v4
+        with:
+          subject-path: ${{ steps.pack-files.outputs.pack }}
 
       - name: Store Binaries
         uses: softprops/action-gh-release@v3

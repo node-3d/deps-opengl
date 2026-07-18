@@ -1,4 +1,11 @@
-msbuild /p:Platform=x64 /p:Configuration=Release /p:PlatformToolset=v142 src\glew\build\vc15\glew_shared.vcxproj
+@echo off
+setlocal
 
-copy /y src\glew\bin\Release\x64\glew32.dll src\build\glew32.dll
-copy /y src\glew\lib\Release\x64\glew32.lib src\build\glew32.lib
+if "%BUILD_PLATFORM%"=="" set BUILD_PLATFORM=x64
+set BUILD_DIR=src\glew-build-%BUILD_PLATFORM%
+
+cmake -S src\glew\build\cmake -B %BUILD_DIR% -A %BUILD_PLATFORM% -DBUILD_UTILS=OFF -DBUILD_SHARED_LIBS=ON -DCMAKE_POLICY_VERSION_MINIMUM=3.5 || exit /b 1
+cmake --build %BUILD_DIR% --config Release --target glew || exit /b 1
+
+copy /y %BUILD_DIR%\bin\Release\glew32.dll src\build\glew32.dll || exit /b 1
+copy /y %BUILD_DIR%\lib\Release\glew32.lib src\build\glew32.lib || exit /b 1
