@@ -10,10 +10,10 @@
 		-DGLFW_BUILD_TESTS=OFF \
 		-DGLFW_BUILD_DOCS=OFF \
 		-DCMAKE_OSX_ARCHITECTURES=x86_64 \
-		-DCMAKE_OSX_DEPLOYMENT_TARGET=13.5 \
-		-DCMAKE_SHARED_LINKER_FLAGS='-install_name "@rpath/glfw.dylib"'
+		-DCMAKE_MACOSX_RPATH=ON \
+		-DCMAKE_OSX_DEPLOYMENT_TARGET=13.5
 
 	cmake --build glfw-build --config Release --target glfw
 
-	mv glfw-build/src/libglfw.3.4.dylib build/glfw.dylib
+	mv glfw-build/src/libglfw.3.4.dylib build/libglfw.3.dylib
 )
