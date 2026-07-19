@@ -10,18 +10,7 @@ This is a part of [Node3D](https://github.com/node-3d) project.
 npm install @node-3d/deps-opengl
 ```
 
-## Binary Origin
 
-Release archives are built by this repository's public GitHub Actions workflows.
-
-Attestations: https://github.com/node-3d/deps-opengl/attestations
-
-To verify a downloaded archive:
-
-```bash
-gh release download <tag> -R node-3d/deps-opengl -p <platform>.gz
-gh attestation verify <platform>.gz -R node-3d/deps-opengl
-```
 
 This dependency package distributes **OpenGL** headers plus **GLFW3** and
 **GLEW** binaries and headers through **npm** for **Node.js** addons.
@@ -89,3 +78,16 @@ are free from licensing requirements. https://www.opengl.org/about/#11
 ---
 
 The rest of this package is MIT licensed.
+
+## Binary Origin
+
+Release archives are built by this repository's public GitHub Actions workflows.
+
+Attestations: https://github.com/node-3d/deps-opengl/attestations
+
+To verify a downloaded archive:
+
+```bash
+gh release download <tag> -R node-3d/deps-opengl -p <platform>.gz
+gh attestation verify <platform>.gz -R node-3d/deps-opengl
+```
