@@ -1,7 +1,7 @@
 {
 	"author": "Luis Blanco <luisblanco1337@gmail.com>",
 	"name": "@node-3d/deps-opengl",
-	"version": "8.0.1",
+	"version": "8.0.2",
 	"description": "Binaries and headers for OpenGL-dependent addons",
 	"license": "MIT",
 	"main": "index.js",
