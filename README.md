@@ -18,6 +18,14 @@ This dependency package distributes **OpenGL** headers plus **GLFW3** and
 * Platforms: Windows x64/ARM64, Linux x64/ARM64, macOS x64/ARM64.
 * Libraries: GLEW 2.2, GLFW 3.4, OpenGL.
 
+## Binary Layout Notes
+
+On macOS, the package provides `libglfw.3.dylib` so downstream native loaders can
+link and load the expected GLFW dylib name directly from this dependency package.
+
+Windows ARM64 builds use the Windows SDK OpenGL import libraries instead of
+carrying a platform-specific `OpenGL32.Lib`. The GLEW build also accounts for
+ARM64 linker base-address constraints.
 
 ## Usage
 
