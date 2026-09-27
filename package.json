@@ -60,9 +60,9 @@
 		"@node-3d/addon-tools": "~10.1.0"
 	},
 	"devDependencies": {
-		"oxfmt": "0.66.0",
-		"oxlint": "1.81.0",
-		"oxlint-tsgolint": "7.0.2001",
+		"oxfmt": "0.70.0",
+		"oxlint": "1.85.0",
+		"oxlint-tsgolint": "7.0.2003",
 		"tslib": "2.8.1"
 	},
 	"type": "module",
