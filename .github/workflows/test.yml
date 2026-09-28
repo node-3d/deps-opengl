@@ -12,18 +12,38 @@ on:
       - master
 
 jobs:
+  package:
+    name: Pack npm Candidate
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.13.0
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Store npm Candidate
+        uses: node-3d/addon-tools/actions/npm-candidate-upload@b40c5ff9d096be46c9e573382e93149256a33a9a
+
   unit-tests:
     name: Unit Tests (${{ matrix.target }})
     strategy:
         fail-fast: false
-        matrix:
+        matrix: &native-matrix
           include:
             - target: windows-x64
               os: windows-2022
               node_arch: x64
+              msbuild_arch: x64
+              build_platform: x64
             - target: windows-arm64
-              os: windows-11-arm
+              os: windows-11-vs2026-arm
               node_arch: arm64
+              msbuild_arch: arm64
+              build_platform: ARM64
+              vs_prerelease: true
             - target: linux-x64
               os: ubuntu-22.04
               node_arch: x64
@@ -59,5 +79,70 @@ jobs:
       - name: Install Modules
         run: npm ci --ignore-scripts
 
+      - name: Add msbuild to PATH
+        if: startsWith(matrix.target, 'windows-')
+        uses: microsoft/setup-msbuild@v3
+        with:
+          msbuild-architecture: ${{ matrix.msbuild_arch }}
+          vs-prerelease: ${{ matrix.vs_prerelease || false }}
+
+      - name: Build Pre Step
+        run: chmod +x src/extract.sh && src/extract.sh
+
+      - name: Build Unix Binaries
+        if: ${{ !startsWith(matrix.target, 'windows-') }}
+        run: node src/build-unix
+
+      - name: Build Windows GLEW
+        if: startsWith(matrix.target, 'windows-')
+        shell: cmd
+        run: src/windows-glew.cmd
+        env:
+          BUILD_PLATFORM: ${{ matrix.build_platform }}
+
+      - name: Build Windows GLFW
+        if: startsWith(matrix.target, 'windows-')
+        shell: cmd
+        run: src/windows-glfw.cmd
+        env:
+          BUILD_PLATFORM: ${{ matrix.build_platform }}
+
+      - name: Stage Built Binaries
+        run: node src/build-post
+
       - name: Run Unit Tests
         run: npm run test:ci
+
+      - name: Store Native Candidate
+        uses: node-3d/addon-tools/actions/native-candidate-upload@b40c5ff9d096be46c9e573382e93149256a33a9a
+        with:
+          artifact-name: native-${{ matrix.target }}
+
+  consumer-tests:
+    name: Packed Consumer (${{ matrix.target }})
+    needs: [package, unit-tests]
+    strategy:
+      fail-fast: false
+      matrix: *native-matrix
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.13.0
+          architecture: ${{ matrix.node_arch }}
+      - name: Install Packed Consumer Candidate
+        id: consumer
+        uses: node-3d/addon-tools/actions/consumer-install@b40c5ff9d096be46c9e573382e93149256a33a9a
+        with:
+          package-name: '@node-3d/deps-opengl'
+          binary-artifact: native-${{ matrix.target }}
+          fixture: test-consumer
+      - name: Build Packed Consumer Addon
+        working-directory: ${{ steps.consumer.outputs.directory }}
+        run: npm run build
+      - name: Run Packed Consumer Tests
+        working-directory: ${{ steps.consumer.outputs.directory }}
+        run: npm test

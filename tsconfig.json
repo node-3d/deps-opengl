@@ -1,0 +1,4 @@
+{
+	"extends": "@node-3d/addon-tools/tsconfig.base.json",
+	"include": ["test-consumer/**/*.ts"]
+}

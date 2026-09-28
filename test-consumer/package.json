@@ -1,0 +1,9 @@
+{
+	"name": "deps-opengl-consumer-test",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "node-gyp rebuild -j max --silent",
+		"test": "node --test \"*.test.ts\""
+	}
+}
