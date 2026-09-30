@@ -3,7 +3,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"build": "node-gyp rebuild -j max --silent",
+		"build": "node-gyp rebuild -j max",
 		"test": "node --test \"*.test.ts\""
 	}
 }
