@@ -1,9 +1,11 @@
 #include <node_api.h>
+#include <GL/glew.h>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 napi_value probe(napi_env env, napi_callback_info) {
 	napi_value result;
-	napi_create_string_utf8(env, glfwGetVersionString(), NAPI_AUTO_LENGTH, &result);
+	napi_get_boolean(env, glfwGetVersionString() != nullptr && glewGetString(GLEW_VERSION) != nullptr, &result);
 	return result;
 }
 
