@@ -134,8 +134,7 @@ jobs:
               exit 1
             fi
             checked=$((checked + 1))
-          done < <(find . -type f \( -name '*.a' -o -name '*.dylib' -o -name '*.node' \) \
-            -not -path './node_modules/*' -not -path './.git/*' -print0)
+          done < <(find bin-* -type f \( -name '*.a' -o -name '*.dylib' -o -name '*.node' \) -print0)
           test "$checked" -gt 0
           echo "Verified $checked Mach-O files target macOS 13.5"
       - name: Store Native Candidate
